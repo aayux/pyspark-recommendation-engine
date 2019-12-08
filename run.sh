@@ -1,10 +1,10 @@
 #!/bin/sh
 
 # set local environment variables
-PROJECT=<project-id>
-BUCKET_NAME=<bucket-name>
-CLUSTER=<cluster-name>
-ZONE="us-west1-a"
+PROJECT='book-recommendations-259715 '
+BUCKET_NAME='bookreview_bucket'
+CLUSTER='reccluster'
+ZONE='us-west1-a'
 
 # create the working directories and chunk the data if not already chunked
 if ! [ -d gs://${BUCKET_NAME}/chunks/reviews ]; then
@@ -26,7 +26,7 @@ if ! [ -d gs://${BUCKET_NAME}/chunks/metabooks ]; then
 fi
 
 # chunk the full dataset if it has been generated
-if [ -f gs://${BUCKET_NAME}/data.json ] && \
+if [ -f gs://${BUCKET_NAME}/dumps/processed.json ] && \
  ! [ -d gs://${BUCKET_NAME}/chunks/processed ]; then
     mkdir -p gs://${BUCKET_NAME}/chunks/processed
     split --bytes 500M --numeric-suffixes --suffix-length=4 \

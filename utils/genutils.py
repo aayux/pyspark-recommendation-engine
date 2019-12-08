@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 import pyspark
+import pyspark.sql.functions as F
+from pyspark.sql import Window
 
 def spark_shape(self):
     r"""
@@ -23,4 +25,15 @@ def rename_columns(df, replace_with):
     except AssertionError:
         print(f'Warning: length of `replace_with` does not match the number of '
               f'columns, returning DataFrame, without renaming columns.')
+    return df
+
+def map_to_numeric(df, column):
+    r""" map string IDs to numeric  values
+    """
+    mapID = df.select(column).distinct()
+    mapID = mapID.withColumn(f'numeric_{column}',   
+                             F.row_number().over(
+                                 Window.orderBy(
+                                     F.monotonically_increasing_id())) - 1)
+    df = df.join(F.broadcast(mapID), on=column, how='left')
     return df
