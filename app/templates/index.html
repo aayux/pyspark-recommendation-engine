@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -11,8 +11,8 @@
 
     <body>
         <b>
-            <a href="#"> [Home] </a>
-            <a href="#"> [Collection] </a>
+            <a href="javascript:window.location.reload()"> [Home] </a>
+            <a href="#"> [Search] </a>
         </b>
 
         <div class="content">
@@ -21,110 +21,132 @@
 
             <br>
             <br>
-            <form action="recommend" method="post">            
+
+            <form action="recommend" method="post">
                 <div class="gallery">
-                    
+
                     <figure>
-                    <img src="../static/css/images/movie1.jpg" class="gallery-img" alt="alt text">
-                    <input type="checkbox" name="book" value=0>
+                        <a href="{{url_for('onclick_book')}}"><img src="{{im_meta[0]['src']}}" class="gallery-img" alt="{{im_meta[0]['title']}}"></a>
+                        <input type="checkbox" name="book" value=0>
+                        {{im_meta[0]['title']}}
                     </figure>
-                    
+
                     <figure>
-                    <img src="../static/css/images/movie2.jpg" class="gallery-img" alt="alt text">
-                    <input type="checkbox" name="book" value=1>
+                        <a href="{{url_for('onclick_book')}}"><img src="{{im_meta[1]['src']}}" class="gallery-img" alt="{{im_meta[1]['title']}}"></a>
+                        <input type="checkbox" name="book" value=1>
+                        {{im_meta[1]['title']}}
                     </figure>
-                    
+
                     <figure>
-                    <img src="../static/css/images/movie3.jpg" class="gallery-img" alt="alt text">
-                    <input type="checkbox" name="book" value=2>
+                        <a href="{{url_for('onclick_book')}}"><img src="{{im_meta[2]['src']}}" class="gallery-img" alt="{{im_meta[2]['title']}}"></a>
+                        <input type="checkbox" name="book" value=2>
+                        {{im_meta[2]['title']}}
                     </figure>
-                    
+
                     <figure>
-                    <img src="../static/css/images/movie4.jpg" class="gallery-img" alt="alt text">
-                    <input type="checkbox" name="book" value=3>
+                        <a href="{{url_for('onclick_book')}}"><img src="{{im_meta[3]['src']}}" class="gallery-img" alt="{{im_meta[3]['title']}}"></a>
+                        <input type="checkbox" name="book" value=3>
+                        {{im_meta[3]['title']}}
                     </figure>
-                    
+
                     <figure>
-                    <img src="../static/css/images/movie5.jpg" class="gallery-img" alt="alt text">
-                    <input type="checkbox" name="book" value=4>
+                        <a href="{{url_for('onclick_book')}}"><img src="{{im_meta[4]['src']}}" class="gallery-img" alt="{{im_meta[4]['title']}}"></a>
+                        <input type="checkbox" name="book" value=4>
+                        {{im_meta[4]['title']}}
                     </figure>
-                    
+
                     <figure>
-                    <img src="../static/css/images/movie6.jpg" class="gallery-img" alt="alt text">
-                    <input type="checkbox" name="book" value=5>
+                        <a href="{{url_for('onclick_book')}}"><img src="{{im_meta[5]['src']}}" class="gallery-img" alt="{{im_meta[5]['title']}}"></a>
+                        <input type="checkbox" name="book" value=5>
+                        {{im_meta[5]['title']}}
                     </figure>
-                    
+
                     <figure>
-                    <img src="../static/css/images/movie7.jpg" class="gallery-img" alt="alt text">
-                    <input type="checkbox" name="book" value=6>
+                        <a href="{{url_for('onclick_book')}}"><img src="{{im_meta[6]['src']}}" class="gallery-img" alt="{{im_meta[6]['title']}}"></a>
+                        <input type="checkbox" name="book" value=6>
+                        {{im_meta[6]['title']}}
                     </figure>
-                    
+
                     <figure>
-                    <img src="../static/css/images/movie8.jpg" class="gallery-img" alt="alt text">
-                    <input type="checkbox" name="book" value=7>
+                        <a href="{{url_for('onclick_book')}}"><img src="{{im_meta[7]['src']}}" class="gallery-img" alt="{{im_meta[7]['title']}}"></a>
+                        <input type="checkbox" name="book" value=7>
+                        {{im_meta[7]['title']}}
                     </figure>
-                    
+
                     <figure>
-                    <img src="../static/css/images/movie9.jpg" class="gallery-img" alt="alt text">
-                    <input type="checkbox" name="book" value=8>
+                        <a href="{{url_for('onclick_book')}}"><img src="{{im_meta[8]['src']}}" class="gallery-img" alt="{{im_meta[8]['title']}}"></a>
+                        <input type="checkbox" name="book" value=8>
+                        {{im_meta[8]['title']}}
                     </figure>
-                    
+
                     <figure>
-                    <img src="../static/css/images/movie10.jpg" class="gallery-img" alt="alt text">
-                    <input type="checkbox" name="book" value=9>
+                        <a href="{{url_for('onclick_book')}}"><img src="{{im_meta[9]['src']}}" class="gallery-img" alt="{{im_meta[9]['title']}}"></a>
+                        <input type="checkbox" name="book" value=9>
+                        {{im_meta[9]['title']}}
                     </figure>
-                    
+
                     <figure>
-                    <img src="../static/css/images/movie11.jpg" class="gallery-img" alt="alt text">
-                    <input type="checkbox" name="book" value=10>
+                        <a href="{{url_for('onclick_book')}}"><img src="{{im_meta[10]['src']}}" class="gallery-img" alt="{{im_meta[10]['title']}}"></a>
+                        <input type="checkbox" name="book" value=10>
+                        {{im_meta[10]['title']}}
                     </figure>
-                    
+
                     <figure>
-                    <img src="../static/css/images/movie12.jpg" class="gallery-img" alt="alt text">
-                    <input type="checkbox" name="book" value=11>
+                        <a href="{{url_for('onclick_book')}}"><img src="{{im_meta[11]['src']}}" class="gallery-img" alt="{{im_meta[11]['title']}}"></a>
+                        <input type="checkbox" name="book" value=11>
+                        {{im_meta[11]['title']}}
                     </figure>
-                    
+
                     <figure>
-                    <img src="../static/css/images/movie13.jpg" class="gallery-img" alt="alt text">
-                    <input type="checkbox" name="book" value=12>
+                        <a href="{{url_for('onclick_book')}}"><img src="{{im_meta[12]['src']}}" class="gallery-img" alt="{{im_meta[12]['title']}}"></a>
+                        <input type="checkbox" name="book" value=12>
+                        {{im_meta[12]['title']}}
                     </figure>
-                    
+
                     <figure>
-                    <img src="../static/css/images/movie14.jpg" class="gallery-img" alt="alt text">
-                    <input type="checkbox" name="book" value=13>
+                        <a href="{{url_for('onclick_book')}}"><img src="{{im_meta[13]['src']}}" class="gallery-img" alt="{{im_meta[13]['title']}}"></a>
+                        <input type="checkbox" name="book" value=13>
+                        {{im_meta[13]['title']}}
                     </figure>
-                    
+
                     <figure>
-                    <img src="../static/css/images/movie15.jpg" class="gallery-img" alt="alt text">
-                    <input type="checkbox" name="book" value=14>
+                        <a href="{{url_for('onclick_book')}}"><img src="{{im_meta[14]['src']}}" class="gallery-img" alt="{{im_meta[14]['title']}}"></a>
+                        <input type="checkbox" name="book" value=14>
+                        {{im_meta[14]['title']}}
                     </figure>
-                    
+
                     <figure>
-                    <img src="../static/css/images/movie16.jpg" class="gallery-img" alt="alt text">
-                    <input type="checkbox" name="book" value=15>
+                        <a href="{{url_for('onclick_book')}}"><img src="{{im_meta[15]['src']}}" class="gallery-img" alt="{{im_meta[15]['title']}}"></a>
+                        <input type="checkbox" name="book" value=15>
+                        {{im_meta[15]['title']}}
                     </figure>
-                    
+
                     <figure>
-                    <img src="../static/css/images/movie17.jpg" class="gallery-img" alt="alt text">
-                    <input type="checkbox" name="book" value=16>
+                        <a href="{{url_for('onclick_book')}}"><img src="{{im_meta[16]['src']}}" class="gallery-img" alt="{{im_meta[16]['title']}}"></a>
+                        <input type="checkbox" name="book" value=16>
+                        {{im_meta[16]['title']}}
                     </figure>
-                    
+
                     <figure>
-                    <img src="../static/css/images/movie18.jpg" class="gallery-img" alt="alt text">
-                    <input type="checkbox" name="book" value=17>
+                        <a href="{{url_for('onclick_book')}}"><img src="{{im_meta[17]['src']}}" class="gallery-img" alt="{{im_meta[17]['title']}}"></a>
+                        <input type="checkbox" name="book" value=17>
+                        {{im_meta[17]['title']}}
                     </figure>
-                    
+
                     <figure>
-                    <img src="../static/css/images/movie19.jpg" class="gallery-img" alt="alt text">
-                    <input type="checkbox" name="book" value=18>
+                        <a href="{{url_for('onclick_book')}}"><img src="{{im_meta[18]['src']}}" class="gallery-img" alt="{{im_meta[18]['title']}}"></a>
+                        <input type="checkbox" name="book" value=18>
+                        {{im_meta[18]['title']}}
                     </figure>
-                    
+
                     <figure>
-                    <img src="../static/css/images/movie20.jpg" class="gallery-img" alt="alt text">
-                    <input type="checkbox" name="book" value=19>
+                        <a href="{{url_for('onclick_book')}}"><img src="{{im_meta[19]['src']}}" class="gallery-img" alt="{{im_meta[19]['title']}}"></a>
+                        <input type="checkbox" name="book" value=19>
+                        {{im_meta[19]['title']}}
                     </figure>
+
                 </div>
-                
+
                 <br>
                 <br>
 
@@ -133,17 +155,17 @@
                         Recommend books to me
                     </button>
                 </b>
-            </form>            
+            </form>
+
             <br>
             <br>
             <br>
 
             <footer>
-                    <p>
-                        Owned and maintained by <a href="https://aayux.github.io">aayux</a>
-                    </p>
-            </footer> 
-
+                <p>
+                    Owned and maintained by <a href="https://aayux.github.io">aayux</a>
+                </p>
+            </footer>
         </div>
     </body>
 </html>

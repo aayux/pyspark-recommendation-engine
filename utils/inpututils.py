@@ -2,10 +2,9 @@
 
 from .context_maker import sql
 
-import numpy as np
-
 def get_next_reviewer_id(uri):
-    return np.load(f'{uri}/dumps/next_reviewer_id.npy')
+    last_reviewer_id = sql.read.json(f'{uri}/last_reviewer_id.json')
+    return last_reviewer_id.collect()[0][0] + 1
 
 def parse_json(): pass
 

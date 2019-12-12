@@ -4,7 +4,7 @@ import os
 import sys
 
 from utils.inpututils import *
-from utils.preprocess import JSONDumper as d
+from utils.jsonreader import JSONDumper as d
 
 # from models.als import Recommender
 
@@ -13,10 +13,7 @@ def main():
     
     # make the data dump
     if not os.path.exists(f'{bucket_uri}/dumps/processed.json'):
-        d.make_data_dict_dumps(d, bucket_uri)
-        
-        import subprocess
-        subprocess.call(['bash scripts/chunker.sh'])
+        d.make_data_dict_dumps(bucket_uri)
 
     # sample input, real input will require parsing json
     # next_reviewer_id = get_next_reviewer_id(bucket_uri)

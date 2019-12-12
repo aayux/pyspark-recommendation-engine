@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -11,8 +11,8 @@
 
     <body>
         <b>
-            <a href="index.html"> [Home] </a>
-            <a href="#"> [Collection] </a>
+            <a href="{{url_for('index')}}"> [Home] </a>
+            <a href="#"> [Search] </a>
         </b>
 
         <div class="content">
@@ -21,46 +21,52 @@
 
             <br>
             <br>
-            
+
             <div class="recommendation-gallery">
-                
+
                 <figure>
-                <img src="../static/css/images/movie1.jpg" class="gallery-img" alt="alt text">
-                </figure>
-                
-                <figure>
-                <img src="../static/css/images/movie5.jpg" class="gallery-img" alt="alt text">
+                    <a href="{{url_for('onclick_book')}}"><img src="{{im_meta[0]['src']}}" class="gallery-img" alt="{{im_meta[0]['title']}}"></a>
+                    {{im_meta[0]['title']}}
                 </figure>
 
                 <figure>
-                <img src="../static/css/images/movie9.jpg" class="gallery-img" alt="alt text">
-                </figure>
-                
-                <figure>
-                <img src="../static/css/images/movie11.jpg" class="gallery-img" alt="alt text">
+                    <a href="{{url_for('onclick_book')}}"><img src="{{im_meta[1]['src']}}" class="gallery-img" alt="{{im_meta[1]['title']}}"></a>
+                    {{im_meta[1]['title']}}
                 </figure>
 
                 <figure>
-                <img src="../static/css/images/movie13.jpg" class="gallery-img" alt="alt text">
+                    <a href="{{url_for('onclick_book')}}"><img src="{{im_meta[2]['src']}}" class="gallery-img" alt="{{im_meta[2]['title']}}"></a>
+                    {{im_meta[2]['title']}}
+                </figure>
+
+                <figure>
+                    <a href="{{url_for('onclick_book')}}"><img src="{{im_meta[3]['src']}}" class="gallery-img" alt="{{im_meta[3]['title']}}"></a>
+                    {{im_meta[3]['title']}}
+                </figure>
+
+                <figure>
+                    <a href="{{url_for('onclick_book')}}"><img src="{{im_meta[4]['src']}}" class="gallery-img" alt="{{im_meta[4]['title']}}"></a>
+                    {{im_meta[4]['title']}}
                 </figure>
 
             </div>
 
             <br>
-
+            <br>
+            <br>
             <p>
                 Click on one of these books to view them
             </p>
-            
+
             <br>
             <br>
             <br>
 
             <footer>
-                    <p>
-                        Owned and maintained by <a href="https://aayux.github.io">aayux</a>
-                    </p>
-            </footer> 
+                <p>
+                    Owned and maintained by <a href="https://aayux.github.io">aayux</a>
+                </p>
+            </footer>
 
         </div>
     </body>

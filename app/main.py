@@ -1,19 +1,40 @@
+import os
+import random
+
 from flask import Flask, \
                   request, redirect, render_template, url_for
-
 app = Flask(__name__)
+
+image_dir = os.path.join('static', 'css', 'images')
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    images = random.sample(os.listdir(image_dir), 20)
+    im_meta = [dict([('title', 'title-text'), 
+                     ('src', os.path.join(image_dir, images[i]))]) \
+               for i in range(20)]
+    return render_template('index.html', im_meta=im_meta)
 
 @app.route('/recommend', methods=['GET', 'POST'])
 def onclick_recommend():
     if request.method == 'POST':
         books = request.form.getlist('book')
+
         # call our recommendation function and return values to display
-        return render_template('recommendations.html')
+
+        images = random.sample(os.listdir(image_dir), 5)
+        im_meta = [dict([('title', 'title-text'), 
+                         ('src', os.path.join(image_dir, images[i]))]) \
+               for i in range(5)]
+
+        return render_template('recommendations.html', im_meta=im_meta)
     return
+
+@app.route('/book/')
+def onclick_book():
+    book = request.form.getlist('book')
+    # get information on the selected book and display the page
+    return render_template('book.html')
 
 if __name__ == '__main__':
     # Note from GCP Examples:
