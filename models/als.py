@@ -5,8 +5,8 @@ import pyspark.sql.functions as F
 from pyspark.ml.recommendation import ALS
 from pyspark.sql.types import StructType, StructField, IntegerType, FloatType
 
-from ..utils.jsonreader import JSONReader
-from ..utils.context_maker import sql
+from utils.jsonreader import JSONReader
+from utils.context_maker import sql
 
 class Recommender(object):
     def __init__(self, uri, method='ALS'):

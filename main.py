@@ -5,10 +5,10 @@ import sys
 
 import tensorflow as tf
 
-from .utils.inpututils import *
-from .utils.preprocess import JSONDumper as d
+from utils.inpututils import *
+from utils.jsonreader import JSONDumper as d
 
-from .models.als import Recommender
+from models.als import Recommender
 
 def main():
     bucket_uri = sys.argv[1]
@@ -17,7 +17,7 @@ def main():
     
     
     if not tf.io.gile.exists(f'{bucket_uri}/dumps/processed.json'):
-        d.make_data_dict_dumps(d, bucket_uri)
+        d.make_data_dict_dumps(bucket_uri)
     
     # sample input, real input will require parsing json
     next_reviewer_id = get_next_reviewer_id(bucket_uri)
