@@ -25,18 +25,23 @@ class JSONReader(object):
                               `pyspark.sql.dataframe.DataFrame`
         """
         if dict_format:
-            mfile = f'{uri}/metaBooks.json'
-            rfile = f'{uri}/reviews_Books_5.json'
+            mfile = f'{uri}/input/metaBooks.json'
+            rfile = f'{uri}/input/reviews_Books_5.json'
             
             self.data_dict = dict([('m', sql.read.json(mfile)),
                                    ('r', sql.read.json(rfile))])
         else:
-            dfile = f'{uri}/processed.json'
+            dfile = f'{uri}/dumps/processed.json'
             return sql.read.json(dfile)
 
-    def write_json(self, uri):
+    def write_json(self, uri, df=None, **kwargs):
         try:
-            self.data.write.json.save(f'{uri}/processed.json')
+            if df is None:
+                self.data.write.mode('overwrite').json(f'{uri}/dumps/processed')
+            else:
+                if kwargs: filename = kwargs['filename']
+                else: filename = time.strftime("%Y%m%H%M%S")
+                df.write.mode('overwrite').json(f'{uri}/dumps/{filename}')
         except:
             # log event
             return False 
@@ -49,7 +54,7 @@ class JSONPreprocesser(JSONReader):
         super().__init__()
         self.read_json(uri)
     
-    def transform(self): 
+    def transform(self, uri): 
         # drop unnecessary or redundant columns
         self.data_dict['r'] = self.data_dict['r'].drop('_corrupt_record', 
                                                        'unixReviewTime')
@@ -104,14 +109,14 @@ class JSONPreprocesser(JSONReader):
                          .select('asin', 'reviewText', 'summary', 'help_factor')\
                          .dropDuplicates(['asin', 'help_factor'])\
                          .drop('help_factor').persist(StorageLevel.DISK_ONLY)
+        
         most_helpful = most_helpful.withColumnRenamed('reviewText', 
                                                       'topReviewText')
         most_helpful = most_helpful.withColumnRenamed('summary', 
                                                       'topReviewSummary')
-
-        # dataframes are too large for broadcast join
-        self.data_dict['r'] = self.data_dict['r'].join(most_helpful, on='asin', 
-                                                                     how='left')
+        
+        # save for later usage, avoid redundancy from join
+        _ = self.write_json(uri, df=most_helpful, filename='most_helpful')
 
         most_helpful.unpersist(blocking=False)
 
@@ -175,11 +180,12 @@ class JSONPreprocesser(JSONReader):
         start = time.time()
         self.data = map_to_numeric_large(self.data, 'asin')
         # self.data = string_indexer(self.data, 'asin')
-        print(f'Elapsed: {time.time() - start}')
+        print(f'DIAGNOSTICS: time elapsed: {time.time() - start}')
+        
         start = time.time()
         self.data = map_to_numeric_large(self.data, 'reviewerID')
         # self.data = string_indexer(self.data, 'reviewerID')
-        print(f'Elapsed: {time.time() - start}')
+        print(f'DIAGNOSTICS: time elapsed: {time.time() - start}')
         
         last_reviewer_id = self.data.agg({'numeric_reviewerID': 'max'})
         return last_reviewer_id
@@ -193,7 +199,7 @@ class JSONDumper(JSONReader):
         r"""
         """
         preprocesser = JSONPreprocesser(bucket_uri)
-        last_reviewer_id = preprocesser.transform()
+        last_reviewer_id = preprocesser.transform(bucket_uri)
         last_reviewer_id.write.mode('overwrite')\
-                        .json(f'{bucket_uri}/last_reviewer_id.json')
+                        .json(f'{bucket_uri}/dumps/last_reviewer_id')
         return cls.write_json(cls, bucket_uri)

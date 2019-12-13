@@ -32,17 +32,26 @@ gcloud dataproc clusters create $CLUSTER \
     --num-worker-local-ssds=${NUM_WORKER_LOCAL_SSDS} \
     --metadata 'MINICONDA_VARIANT=3' \
     --metadata 'MINICONDA_VERSION=latest' \
-    --metadata 'PIP_PACKAGES=numpy==1.16.4 pandas==0.24.1 scipy==1.3.0' \
+    --metadata 'PIP_PACKAGES=numpy==1.16.4 pandas==0.24.1 scipy==1.3.0 tensorflow' \
+    --initialization-actions \
+    gs://dataproc-initialization-actions/conda/bootstrap-conda.sh,gs://dataproc-initialization-actions/conda/install-conda-env.sh
+
+gcloud dataproc clusters create $CLUSTER \
+    --project=${PROJECT} --zone=${ZONE} --image-version 1.3 \
+    --single-node \
+    --metadata 'MINICONDA_VARIANT=3' \
+    --metadata 'MINICONDA_VERSION=latest' \
+    --metadata 'PIP_PACKAGES=numpy==1.16.4 pandas==0.24.1 scipy==1.3.0 tensorflow' \
     --initialization-actions \
     gs://dataproc-initialization-actions/conda/bootstrap-conda.sh,gs://dataproc-initialization-actions/conda/install-conda-env.sh
 
 # zip python packages
-zip -r pypackage.zip scripts/ utils/ models/
+zip -r pybundle.zip scripts/ utils/ models/
 
 # submit job to Cloud Dataproc cluster
-gcloud dataproc jobs submit pyspark test.py \
+gcloud dataproc jobs submit pyspark main.py \
     --cluster=${CLUSTER} \
-    --py-files pypackage.zip \
+    --py-files pybundle.zip \
     -- gs://${BUCKET_NAME}
 
 # delete the cloud Dataproc cluster

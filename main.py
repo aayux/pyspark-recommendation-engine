@@ -3,6 +3,8 @@
 import os
 import sys
 
+import tensorflow as tf
+
 from .utils.inpututils import *
 from .utils.preprocess import JSONDumper as d
 
@@ -12,7 +14,9 @@ def main():
     bucket_uri = sys.argv[1]
     
     # make the data dump
-    if not os.path.exists(f'{bucket_uri}/processed.json'):
+    
+    
+    if not tf.io.gile.exists(f'{bucket_uri}/dumps/processed.json'):
         d.make_data_dict_dumps(d, bucket_uri)
     
     # sample input, real input will require parsing json
