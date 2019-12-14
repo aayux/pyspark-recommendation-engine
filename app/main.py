@@ -1,48 +1,49 @@
-import os
-import random
+#!/usr/bin/env python
 
 from flask import Flask, \
                   request, redirect, render_template, url_for
-app = Flask(__name__)
 
-image_dir = os.path.join('static', 'css', 'images')
+import sys
+sys.path.append('..')
+
+from utils.get_request import *
+
+# create a Flask instance
+app = Flask(__name__)
 
 @app.route('/')
 def index():
-    images = random.sample(os.listdir(image_dir), 20)
-    im_meta = [dict([('title', 'title-text'), 
-                     ('src', os.path.join(image_dir, images[i]))]) \
-               for i in range(20)]
+    # get 20 random image `urls` with `numeric_asin` from the 
+    # database as a list of python dictionaries
+    
+    """ 
+    format: [{
+              'numeric_asin': <numeric_asin>, 
+              'title':        <title-text>, 
+              'src':          <url>
+            }, { ... }]
+    """
+    
+    im_meta = get_random_books()
     return render_template('index.html', im_meta=im_meta)
 
-@app.route('/recommend', methods=['GET', 'POST'])
+@app.route('/recommendations', methods=['GET', 'POST'])
 def onclick_recommend():
     if request.method == 'POST':
-        books = request.form.getlist('book')
+        numeric_asin = request.form.getlist('book')
 
         # call our recommendation function and return values to display
-
-        images = random.sample(os.listdir(image_dir), 5)
-        im_meta = [dict([('title', 'title-text'), 
-                         ('src', os.path.join(image_dir, images[i]))]) \
-               for i in range(5)]
+        # same format as `im_meta` in `index()`
+        im_meta = get_recommendations(asin=numeric_asin)
 
         return render_template('recommendations.html', im_meta=im_meta)
     return
 
-@app.route('/book/')
+@app.route('/info')
 def onclick_book():
-    book = request.form.getlist('book')
-    # get information on the selected book and display the page
-    return render_template('book.html')
+    numeric_asin = request.form.getlist('book')
+    metadata = get_book_info(asin=numeric_asin)
+    return render_template('info.html', metadata=metadata)
 
 if __name__ == '__main__':
-    # Note from GCP Examples:
-    # This is used when running locally only. When deploying to Google App
-    # Engine, a webserver process such as Gunicorn will serve the app. This
-    # can be configured by adding an `entrypoint` to app.yaml.
-    # Flask's development server will automatically serve static files in
-    # the "static" directory. See:
-    # http://flask.pocoo.org/docs/1.0/quickstart/#static-files. Once deployed,
-    # App Engine itself will serve those files as configured in app.yaml.
-    app.run(host='127.0.0.1', port=8080, debug=True)
+    app.run(host='127.0.0.1', port=9001, debug=True)

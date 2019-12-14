@@ -7,29 +7,24 @@ import tensorflow as tf
 
 from utils.inpututils import *
 from utils.jsonreader import JSONDumper as d
-
 from models.als import Recommender
 
 def main():
     bucket_uri = sys.argv[1]
     
-    # make the data dump
-    
-    
-    if not tf.io.gile.exists(f'{bucket_uri}/dumps/processed.json'):
+    if not tf.io.gfile.exists(f'{bucket_uri}/dumps/train'):
         d.make_data_dict_dumps(bucket_uri)
     
-    # sample input, real input will require parsing json
+    # sample input only
     next_reviewer_id = get_next_reviewer_id(bucket_uri)
     default_rating = 5 * (5 + .1) / 6
-    input_tuple = [(10533, next_reviewer_id, default_rating), 
-                   (2549, next_reviewer_id, default_rating), 
-                   (4781, next_reviewer_id, default_rating)]
+    input_tuple = [(float(10533), next_reviewer_id, default_rating), 
+                   (float(2549), next_reviewer_id, default_rating), 
+                   (float(4781), next_reviewer_id, default_rating)]
     
     model = Recommender(bucket_uri)
     response = model.fit_transform(input_tuple)
     
-    # jsonify DataFrame and send to website
     return jsonify(response)
 
 if __name__ == '__main__':

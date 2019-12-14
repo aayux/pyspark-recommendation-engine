@@ -31,13 +31,18 @@ class JSONReader(object):
             self.data_dict = dict([('m', sql.read.json(mfile)),
                                    ('r', sql.read.json(rfile))])
         else:
-            dfile = f'{uri}/dumps/processed.json'
-            return sql.read.json(dfile)
+            dfile = f'{uri}/dumps/processed'
+            tfile = f'{uri}/dumps/train'
+            return sql.read.json(dfile), sql.read.json(tfile)
 
     def write_json(self, uri, df=None, **kwargs):
         try:
             if df is None:
                 self.data.write.mode('overwrite').json(f'{uri}/dumps/processed')
+                self.data.select('numeric_asin', 
+                                 'numeric_reviewerID', 
+                                 'rating').write.mode('overwrite')\
+                                          .json(f'{uri}/dumps/train')
             else:
                 if kwargs: filename = kwargs['filename']
                 else: filename = time.strftime("%Y%m%H%M%S")
@@ -178,16 +183,35 @@ class JSONPreprocesser(JSONReader):
 
         # print(f'Created table of size {self.data.shape()}')
         start = time.time()
-        self.data = map_to_numeric_large(self.data, 'asin')
+        # self.data = map_to_numeric_large(self.data, 'asin')
         # self.data = string_indexer(self.data, 'asin')
-        print(f'DIAGNOSTICS: time elapsed: {time.time() - start}')
+        column = 'asin'
+        indexer = StringIndexer(inputCol=column, outputCol=f'numeric_{column}',
+                                handleInvalid='skip')
+        self.data = indexer.fit(self.data).transform(self.data)
+        
+        print(f'{time.strftime("%D %H:%M:%S")} DIAGNOSTICS '
+              f'time elapsed: {time.time() - start}')
         
         start = time.time()
-        self.data = map_to_numeric_large(self.data, 'reviewerID')
+        # self.data = map_to_numeric_large(self.data, 'reviewerID')
         # self.data = string_indexer(self.data, 'reviewerID')
-        print(f'DIAGNOSTICS: time elapsed: {time.time() - start}')
         
+        column = 'reviewerID'
+        indexer = StringIndexer(inputCol=column, outputCol=f'numeric_{column}', 
+                                handleInvalid='skip')
+        self.data = indexer.fit(self.data).transform(self.data)
+
+        print(f'{time.strftime("%D %H:%M:%S")} DIAGNOSTICS '
+              f'time elapsed: {time.time() - start}')
+        
+        _ = self.write_json(uri)
+
         last_reviewer_id = self.data.agg({'numeric_reviewerID': 'max'})
+
+        print(f'{time.strftime("%D %H:%M:%S")} DIAGNOSTICS '
+        f'completed data write')
+
         return last_reviewer_id
 
 class JSONDumper(JSONReader):
@@ -202,4 +226,5 @@ class JSONDumper(JSONReader):
         last_reviewer_id = preprocesser.transform(bucket_uri)
         last_reviewer_id.write.mode('overwrite')\
                         .json(f'{bucket_uri}/dumps/last_reviewer_id')
-        return cls.write_json(cls, bucket_uri)
+        # _ = cls.write_json(cls, bucket_uri)
+        return

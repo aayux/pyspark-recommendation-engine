@@ -27,7 +27,7 @@
 
                     <figure>
                         <a href="{{url_for('onclick_book')}}"><img src="{{im_meta[0]['src']}}" class="gallery-img" alt="{{im_meta[0]['title']}}"></a>
-                        <input type="checkbox" name="book" value=0>
+                        <input type="checkbox" name="book" value="{{im_meta[0]['numeric_asin']}}">
                         {{im_meta[0]['title']}}
                     </figure>
 
