@@ -53,6 +53,11 @@ class Recommender(object):
         
         return response
     
+    def get_next_reviewer_id(self):
+        last_reviewer_id = sql.read.json(f'{self.uri}/dumps/last_reviewer_id')
+        return last_reviewer_id.collect()[0][0] + 1
+
+    
     def random_sample(self, n=20, seed=42):
         return self.data.sample(False, .05, seed=seed).limit(n)\
                         .select('numeric_asin', 'imUrl', 'title')

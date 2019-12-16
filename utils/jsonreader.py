@@ -9,15 +9,14 @@ from pyspark.storagelevel import StorageLevel
 import numpy as np
 
 from .genutils import *
-from .context_maker import sql
-
 
 class JSONReader(object):
     r"""
     """
-    def __init__(self):
+    def __init__(self, sql=None):
         self.data_dict = None
         self.data = None
+        self.sql = sql
     
     def read_json(self, uri, dict_format=True):
         r"""
@@ -25,12 +24,16 @@ class JSONReader(object):
                               a dictionary containing 
                               `pyspark.sql.dataframe.DataFrame`
         """
+        if self.sql == None:
+            from .context_maker import sql
+            self.sql = sql
+
         if dict_format:
             mfile = f'{uri}/input/metaBooks.json'
             rfile = f'{uri}/input/reviews_Books_5.json'
             
-            self.data_dict = dict([('m', sql.read.json(mfile)),
-                                   ('r', sql.read.json(rfile))])
+            self.data_dict = dict([('m', self.sql.read.json(mfile)),
+                                   ('r', self.sql.read.json(rfile))])
         else:
             dfile = f'{uri}/dumps/processed'
             tfile = f'{uri}/dumps/train'
@@ -220,10 +223,10 @@ class JSONDumper(JSONReader):
     """
 
     @classmethod
-    def make_data_dict_dumps(cls, bucket_uri, sql):
+    def make_data_dict_dumps(cls, bucket_uri):
         r"""
         """
-        preprocesser = JSONPreprocesser(bucket_uri, sql)
+        preprocesser = JSONPreprocesser(bucket_uri)
         last_reviewer_id = preprocesser.transform(bucket_uri)
         last_reviewer_id.write.mode('overwrite')\
                         .json(f'{bucket_uri}/dumps/last_reviewer_id')

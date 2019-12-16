@@ -44,9 +44,9 @@ gcloud  beta dataproc clusters create $CLUSTER \
 zip -r pybundle.zip utils/ models/
 
 # submit job to Cloud Dataproc cluster
-gcloud dataproc jobs submit pyspark launch.py \
+gcloud dataproc jobs submit pyspark example.py \
     --cluster=${CLUSTER} --region=${REGION} \
-    --py-files ../pybundle.zip \
+    --py-files pybundle.zip \
     -- gs://${BUCKET_NAME}
 
 # delete the cloud Dataproc cluster

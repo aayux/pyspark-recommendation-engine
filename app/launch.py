@@ -36,7 +36,7 @@ def onclick_recommend():
         numeric_asin = request.form.getlist('book')
 
         # assign the next highest reviewer id
-        next_reviewer_id = get_next_reviewer_id(STORAGE_BUCKET)
+        next_reviewer_id = model.get_next_reviewer_id()
         
         # default rating for liking a book is 4.25 
         default_rating = 5 * (5 + .1) / 6
