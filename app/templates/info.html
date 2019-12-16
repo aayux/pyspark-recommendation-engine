@@ -16,8 +16,8 @@
         </b>
 
         <div class="content">
-            <h1 class="title">Book Recommendation System</h1>
-            <h3 class="subtitle"></h3>
+            <h1 class="title">{{metadata['title']}}</h1>
+            <h3 class="subtitle">Rating: {{metadata['avg_rating']}}</h3>
 
             <br>
             <br>
@@ -25,20 +25,26 @@
             <div class="recommendation-gallery">
                 
                 <div class="float-item">
-                    <img src="http://ecx.images-amazon.com/images/I/51DH145C5JL.jpg" alt="User Image" style="float: left" width=225 height=300><br><br>
+                    <img src="{{metadata['imUrl']}}" alt="#" style="float: left" width=225 height=300>
+                    <br>
+                    <br>
                 </div>
                 
                 <div class="content">
-                    <b>Title:       </b>The Sherlock Holmes Audio Collection<br>
-                    <b>Asin:        </b>0001048236<br>
-                    <b>Rank:        </b>8973864<br>
-                    <b>Price:       </b>9.26<br> 
-                    <b>Description: </b><br>One thing is certain, Sherlockians, put aside your Baring-GouldAnnotated, your Folio SocietyIllustrated-for the time being, the Oxford is the edition to curl up with on a winter's night&#34;--The Chicago Tribune&#34;An incomparable gift book; or, should you find it impossible to surrender up such treasures, the best of gifts to oneself&#34;--USA Today&#34;To the true Sherlockian, this will be a treasure; to otherwise diverted detective story fans, it is a rich lode for discovery&#34;--Denver Post&#34;The complete and authentic adventures of the legendary detective--expertly edited and annotated by a team of Holmes scholars....in a handsome, boxed set....A lovely gift&#34;--The Christian Science Monitor&#34;Here in nine volumes...are all the adventures of Holmes and Watson. Each book has an introduction, something new and fascinating for even the most devoted Holmesians plus a series of intelligent notes at the back of each volume.&#34;--Oxford Times&#34;TheOxford Sherlock Holmes, a new edition of the stories, is a splendid piece of publishing. Nine compact volumes, beautifully produced, each with a stimulating introduction; clear type, accurate texts, a handy chronology, a helpful bibliography. And, most valuable of all, explanatory notes running to 50 pages or more per volume.&#34; --John Gross, writing inSunday Telegraph--This text refers to thePaperbackedition.", <br><!--description-->
+                    <b>Description:</b>
+                    <br>
+                    {{metadata['description']}}
+                    <br>
                     
-                    <hr size="2" align="center" noshade width="100%" color="000000"><br>
-                    
-                    <b>Top Review: </b><br>
-                    <b></b><br>
+                    <hr size="2" align="center" noshade width="100%" color="000000">
+                    <p> <b>Top Review: "{{metadata['topReviewSummary']}}"</b>
+                        <br>
+                        {{metadata['topReviewText']}}
+                        <br>
+                    </p>
+
+                    <br>
+                    <br>
 
                 </div>
             </div>

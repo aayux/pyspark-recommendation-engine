@@ -20,7 +20,7 @@ def index():
     format: [{
               'numeric_asin': <numeric_asin>, 
               'title':        <title-text>, 
-              'src':          <url>
+              'imUrl':          <url>
             }, { ... }]
     """
     
@@ -39,11 +39,14 @@ def onclick_recommend():
         return render_template('recommendations.html', im_meta=im_meta)
     return
 
-@app.route('/info')
+@app.route('/info', methods=['GET', 'POST'])
 def onclick_book():
-    numeric_asin = request.form.getlist('book')
-    metadata = get_book_info(asin=numeric_asin)
-    return render_template('info.html', metadata=metadata)
+    if request.method == 'POST':
+        numeric_asin = request.form.getlist('book')
+        metadata = get_book_info(asin=numeric_asin)
+        
+        return render_template('info.html', metadata=metadata)
+    return
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=9001, debug=True)

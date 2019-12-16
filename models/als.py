@@ -13,7 +13,9 @@ from utils.context_maker import sql
 class Recommender(object):
     def __init__(self, uri, method='ALS'):
         reader = JSONReader()
-        self.data, self.train = reader.read_json(uri, dict_format=False)
+        
+        self.uri = uri
+        self.data, self.train = reader.read_json(self.uri, dict_format=False)
         
         self.data = self.data.persist(StorageLevel.DISK_ONLY)
         self.train = self.train.persist(StorageLevel.MEMORY_AND_DISK)
@@ -63,7 +65,7 @@ class Recommender(object):
 
         asin = data.select('asin').collect()[0][0]
         
-        hfile = f'{uri}/dumps/most_helpful'
+        hfile = f'{self.uri}/dumps/most_helpful'
         most_helpful = sql.read.json(hfile).filter(F.col('asin') == asin)
 
         response = data.join(F.broadcast(most_helpful), on='asin', how='left')

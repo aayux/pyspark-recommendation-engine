@@ -32,7 +32,7 @@ class app_recommend(Resource):
         query = args['query']
         
         # assign the next highest reviewer id
-        next_reviewer_id = get_next_reviewer_id(bucket_uri)
+        next_reviewer_id = get_next_reviewer_id(STORAGE_BUCKET)
         
         # default rating for liking a book is 4.25 
         default_rating = 5 * (5 + .1) / 6
