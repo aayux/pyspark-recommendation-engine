@@ -6,7 +6,7 @@ from flask import Flask, \
 import sys
 sys.path.append('..')
 
-from .get_request import *
+from request_getter import *
 
 # create a Flask instance
 app = Flask(__name__)

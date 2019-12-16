@@ -4,6 +4,7 @@
 PROJECT='book-recommendations-259715 '
 BUCKET_NAME='bookreview_bucket'
 CLUSTER='democluster'
+REGION='us-west1'
 ZONE='us-west1-a'
 
 # cluster configuration
@@ -19,11 +20,13 @@ gcloud config set project ${PROJECT}
 # TO DO: write configuration yaml
 
 # delete any pre-existing clusters
-yes | gcloud dataproc clusters delete $CLUSTER
+yes | gcloud dataproc clusters delete $CLUSTER --region=${REGION}
 
 # create a cloud Dataproc cluster
-gcloud dataproc clusters create $CLUSTER \
-    --project=${PROJECT} --zone=${ZONE} --image-version 1.3 \
+gcloud  beta dataproc clusters create $CLUSTER \
+    --project=${PROJECT} --zone=${ZONE} --region=${REGION} \
+    --image-version 1.3 \
+    --enable-component-gateway \
     --num-masters=${NUM_MASTERS} \
     --master-machine-type=${MASTER_MACHINE_TYPE} \
     --num-master-local-ssds=${NUM_MASTER_LOCAL_SSDS} \
@@ -33,7 +36,7 @@ gcloud dataproc clusters create $CLUSTER \
     --metadata 'MINICONDA_VARIANT=3' \
     --metadata 'MINICONDA_VERSION=latest' \
     --metadata 'PIP_PACKAGES=numpy==1.16.4 pandas==0.24.1 scipy==1.3.0 
-                flask==1.1.1 flask-restful==0.3.7 tensorflow requests' \
+                flask==1.1.1 flask-restful==0.3.7 tensorflow' \
     --initialization-actions \
     gs://dataproc-initialization-actions/conda/bootstrap-conda.sh,gs://dataproc-initialization-actions/conda/install-conda-env.sh
 
@@ -41,13 +44,13 @@ gcloud dataproc clusters create $CLUSTER \
 zip -r pybundle.zip utils/ models/
 
 # submit job to Cloud Dataproc cluster
-gcloud dataproc jobs submit pyspark main.py \
-    --cluster=${CLUSTER} \
-    --py-files pybundle.zip \
+gcloud dataproc jobs submit pyspark launch.py \
+    --cluster=${CLUSTER} --region=${REGION} \
+    --py-files ../pybundle.zip \
     -- gs://${BUCKET_NAME}
 
 # delete the cloud Dataproc cluster
-gcloud dataproc clusters delete $CLUSTER
+gcloud dataproc clusters delete $CLUSTER --region=${REGION}
 
 # (optional) delete the Dataproc bucket
 # gsutil rb gs://${BUCKET_NAME}/dataproc*
