@@ -6,7 +6,7 @@ from flask import Flask, \
 import sys
 sys.path.append('..')
 
-from utils.get_request import *
+from .get_request import *
 
 # create a Flask instance
 app = Flask(__name__)
@@ -49,4 +49,4 @@ def onclick_book():
     return
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=9001, debug=True)
+    app.run(host='127.0.0.1', port=8081, debug=True)

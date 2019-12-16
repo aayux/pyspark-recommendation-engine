@@ -8,13 +8,13 @@ from pyspark.storagelevel import StorageLevel
 from pyspark.sql.types import StructType, StructField, IntegerType, FloatType
 
 from utils.jsonreader import JSONReader
-from utils.context_maker import sql
 
 class Recommender(object):
-    def __init__(self, uri, method='ALS'):
+    def __init__(self, uri, sql, method='ALS'):
         reader = JSONReader()
         
         self.uri = uri
+        self.sql = sql
         self.data, self.train = reader.read_json(self.uri, dict_format=False)
         
         self.data = self.data.persist(StorageLevel.DISK_ONLY)
@@ -26,7 +26,7 @@ class Recommender(object):
         schema = StructType([StructField('numeric_asin', FloatType(), False),
                              StructField('numeric_reviewerID', FloatType(), False), 
                              StructField('rating', FloatType(), False)])
-        user_input = sql.createDataFrame(input_tuple, schema)
+        user_input = self.sql.createDataFrame(input_tuple, schema)
         self.train = self.train.union(user_input)
 
         # build the recommendation model using ALS on the training data
@@ -66,7 +66,7 @@ class Recommender(object):
         asin = data.select('asin').collect()[0][0]
         
         hfile = f'{self.uri}/dumps/most_helpful'
-        most_helpful = sql.read.json(hfile).filter(F.col('asin') == asin)
+        most_helpful = self.sql.read.json(hfile).filter(F.col('asin') == asin)
 
         response = data.join(F.broadcast(most_helpful), on='asin', how='left')
 

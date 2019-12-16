@@ -6,7 +6,7 @@ from flask import Flask
 from flask_restful import reqparse, abort, Api, Resource
 
 from utils.inpututils import *
-from utils.preprocess import JSONDumper as d
+from utils.context_maker import sql
 from models.als import Recommender
 
 # create a Flask instance
@@ -32,7 +32,7 @@ class app_recommend(Resource):
         query = args['query']
         
         # assign the next highest reviewer id
-        next_reviewer_id = get_next_reviewer_id(STORAGE_BUCKET)
+        next_reviewer_id = get_next_reviewer_id(STORAGE_BUCKET, sql)
         
         # default rating for liking a book is 4.25 
         default_rating = 5 * (5 + .1) / 6

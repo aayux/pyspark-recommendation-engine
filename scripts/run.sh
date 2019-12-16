@@ -32,7 +32,8 @@ gcloud dataproc clusters create $CLUSTER \
     --num-worker-local-ssds=${NUM_WORKER_LOCAL_SSDS} \
     --metadata 'MINICONDA_VARIANT=3' \
     --metadata 'MINICONDA_VERSION=latest' \
-    --metadata 'PIP_PACKAGES=numpy==1.16.4 pandas==0.24.1 scipy==1.3.0 flask==1.1.1 flask-restful==0.3.7 tensorflow' \
+    --metadata 'PIP_PACKAGES=numpy==1.16.4 pandas==0.24.1 scipy==1.3.0 
+                flask==1.1.1 flask-restful==0.3.7 tensorflow requests' \
     --initialization-actions \
     gs://dataproc-initialization-actions/conda/bootstrap-conda.sh,gs://dataproc-initialization-actions/conda/install-conda-env.sh
 
