@@ -11,7 +11,7 @@ from utils.jsonreader import JSONReader
 
 class Recommender(object):
     def __init__(self, uri, sql, method='ALS'):
-        reader = JSONReader()
+        reader = JSONReader(sql)
         
         self.uri = uri
         self.sql = sql

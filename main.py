@@ -2,18 +2,28 @@
 
 import sys
 
-from flask import Flask
+from flask import Flask, g
 from flask_restful import reqparse, abort, Api, Resource
 
 from utils.inpututils import *
-from utils.context_maker import sql
 from models.als import Recommender
+
+from pyspark import SparkConf, SparkContext, SQLContext
 
 # create a Flask instance
 app = Flask(__name__)
 
 # create a Flask-RESTful API instance
 api = Api(app)
+
+# set up the Spark and Spark SQL contexts
+STORAGE_BUCKET = sys.argv[1]
+
+sc = g._sc = SparkContext.getOrCreate()
+sql = SQLContext(sc)
+
+# initialise the model object
+model = Recommender(STORAGE_BUCKET, sql)
 
 # create a parser
 parser = reqparse.RequestParser()
@@ -53,13 +63,16 @@ class app_book_info(Resource):
         response = model.data_lookup(on='numeric_asin', key=float(query))
         return jsonify(response)
 
+# @app.teardown_appcontext
+# def teardown_sparkcontext(exception):
+#     sc = getattr(g, '_sc', None)
+#     if sc is not None:
+#         sc.close()
+
 # setup the API resource routing
 api.add_resource(app_random_books, '/')
 api.add_resource(app_recommend, '/recommendations')
 api.add_resource(app_book_info, '/info')
-
-STORAGE_BUCKET = sys.argv[1]
-model = Recommender(STORAGE_BUCKET)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)

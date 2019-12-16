@@ -14,9 +14,10 @@ from .genutils import *
 class JSONReader(object):
     r"""
     """
-    def __init__(self):
+    def __init__(self, sql):
         self.data_dict = None
         self.data = None
+        self.sql = sql
     
     def read_json(self, uri, dict_format=True):
         r"""
@@ -28,12 +29,12 @@ class JSONReader(object):
             mfile = f'{uri}/input/metaBooks.json'
             rfile = f'{uri}/input/reviews_Books_5.json'
             
-            self.data_dict = dict([('m', sql.read.json(mfile)),
-                                   ('r', sql.read.json(rfile))])
+            self.data_dict = dict([('m', self.sql.read.json(mfile)),
+                                   ('r', self.sql.read.json(rfile))])
         else:
             dfile = f'{uri}/dumps/processed'
             tfile = f'{uri}/dumps/train'
-            return sql.read.json(dfile), sql.read.json(tfile)
+            return self.sql.read.json(dfile), self.sql.read.json(tfile)
 
     def write_json(self, uri, df=None, **kwargs):
         try:
@@ -55,8 +56,8 @@ class JSONReader(object):
 class JSONPreprocesser(JSONReader):
     r"""
     """
-    def __init__(self, uri):
-        super().__init__()
+    def __init__(self, uri, sql):
+        super().__init__(sql)
         self.read_json(uri)
     
     def transform(self, uri): 
@@ -219,10 +220,10 @@ class JSONDumper(JSONReader):
     """
 
     @classmethod
-    def make_data_dict_dumps(cls, bucket_uri):
+    def make_data_dict_dumps(cls, bucket_uri, sql):
         r"""
         """
-        preprocesser = JSONPreprocesser(bucket_uri)
+        preprocesser = JSONPreprocesser(bucket_uri, sql)
         last_reviewer_id = preprocesser.transform(bucket_uri)
         last_reviewer_id.write.mode('overwrite')\
                         .json(f'{bucket_uri}/dumps/last_reviewer_id')
